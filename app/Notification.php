@@ -41,7 +41,7 @@ class Notification extends Model
         $downstreamResponse->tokensWithError();
     }
 
-    public static function toMultiDevice($model, $tok = null, $title = null, $body = null, $icon, $clickAction)
+    public static function toMultiDevice($model, $title = null, $body = null, $icon, $clickAction)
     {
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
@@ -59,6 +59,7 @@ class Notification extends Model
         $data = $dataBuilder->build();
 
         $tokens = $model->pluck('device_token')->toArray();
+        //$tokens = $model['device_token'];
 
         $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
 
