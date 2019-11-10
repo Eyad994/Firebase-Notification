@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Notification;
+use App\User;
 use FCM;
 
 class HomeController extends Controller
 {
     public function sendNotification()
     {
+        $todayReserves = Notification::where('date', date('Y-m-d'))->get(['time', 'date']);
+        $u = User::where('id','>', 1)->get(['email', 'name']);
+
+        dd($u);
         // get all rows that the column date = today
         // then check if the current time = time
         // after that send notification
@@ -74,6 +79,39 @@ class HomeController extends Controller
     public function fire()
     {
         return view('firebaseview');
+    }
+
+    public function sendAcceptNotification()
+    {
+        /**
+         * @param $providerId, $userId || $id of reservation table and then we can get the provider and user from the reservation row.
+         *
+         * $userToken = User::where('id', $userId)->pluck('device_token')[0];
+         * $providerName = User::where('id', $providerId)->pluck('name')[0];
+         * $notification = new Notification;
+         * $notification ->toSingleDevice($userToken, 'Congratulations!', $providerName . ' has accept your reserve', null, null);
+         */
+    }
+
+    public function sendDeclineNotification()
+    {
+        /**
+         * @param $providerId, $userId || $id of reservation and then we can get the provider and user from the reservation row.
+         *
+         * $userToken = User::where('id', $userId)->pluck('device_token')[0];
+         * $providerName = User::where('id', $providerId)->pluck('name')[0];
+         * $notification = new Notification;
+         * $notification ->toSingleDevice($userToken, 'We Apologize!', $providerName . ' has declined your reserve', null, null);
+         */
+    }
+
+    public function messageToAllUsers()
+    {
+        /**
+         * $tokens = User::where('device_token', '!=', null)->get(['device_token']);
+         *
+         * $notification->sendTo($tokens, 'Discount!', 'Make your first reservation free!');
+         */
     }
 
 }

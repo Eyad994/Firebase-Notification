@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Notification;
+use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -39,24 +40,29 @@ class DemoCron extends Command
      */
     public function handle()
     {
+        /**
+         * $todayReserves = Reserves::get('date', date('Y-m-d'))->get(['time', 'user_id', 'provider_id']);
+         * foreach($todayReserves as $reserve)
+         * {
+         *   $userToken = User::where('id', $reserve['user_id'])->pluck('device_token')[0];
+         *   $providerName = User::where('id', $reserve['provider_id'])->pluck('name')[0];
+         *   $noti->toSingleDevice($userToken, 'Congratulations!', $ProviderName.' has waiting you', null, null);
+         * }
+         */
+
         \Log::info("Cron time is: ".date("g:iA", strtotime(now())));
 
         $todayTimes = Notification::where('date', date('Y-m-d'))->pluck('time');
-        $noti = new Notification();
 
         foreach ($todayTimes as $time){
             Log::notice("Time is: ". $time);
             /*$token = 'coSYTXVthR0:APA91bGfJN1_FViYa2SlUIUbnAdN5nATsiKMdUyfKDtc0cL-abg0NhPSqdUOZg3Ih2v2vx-pbaDFe2Xl0xC9pCv40nHq47eNn7jIen6PMTktMFY3XhkQrCzXeJdyQgL8GzvRRSeUEBP8';
             $noti->toSingleDevice($token, 'Your reserve is almost ', 'body', null, null);*/
             if (date("g:iA", strtotime($time)) == date("g:iA", strtotime(now()))){
-                \Log::info("Time true when : ".$time);
+                Log::info("Time true when : ".$time);
             }
         }
-        /*
-           Write your database logic we bellow:
-           Item::create(['name'=>'hello new']);
-        */
 
-        $this->info('Demo:Cron Cummand Run successfully!');
+        $this->info('Demo:Cron Command Run successfully!');
     }
 }
