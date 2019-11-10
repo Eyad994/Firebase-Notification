@@ -11,14 +11,12 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Route::get('/sendMulti', 'HomeController@sendNotificationToMultiple');
 
 
 Route::get('/send', 'HomeController@sendNotification');
-Route::get('/fire', function (){
-   return view('firebaseview');
-});
+Route::get('/fire', 'HomeController@fire');

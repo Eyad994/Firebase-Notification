@@ -10,6 +10,9 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 
 class Notification extends Model
 {
+
+    protected $fillable = ['time', 'date'];
+
     public static function toSingleDevice($tok = null, $title = null, $body = null, $icon, $clickAction)
     {
         $optionBuilder = new OptionsBuilder();
@@ -58,8 +61,8 @@ class Notification extends Model
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        $tokens = $model->pluck('device_token')->toArray();
-        //$tokens = $model['device_token'];
+        //$tokens = $model->pluck('device_token')->toArray();
+        $tokens = $model['device_token'];
 
         $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
 
